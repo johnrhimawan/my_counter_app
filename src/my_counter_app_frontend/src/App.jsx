@@ -1,10 +1,18 @@
-import { useState } from 'react';
-import { my_counter_app_backend } from 'declarations/my_counter_app_backend';
+import { useState } from "react";
+import { my_counter_app_backend } from "declarations/my_counter_app_backend";
+import { useAuth } from "./use-auth-client";
 
 function App() {
-
   const [counter, setCounter] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const [result, setResult] = React.useState("");
+  const { whoamiActor, logout } = useAuth();
+
+  const handleClick = async () => {
+    const whoami = await whoamiActor.whoamçi();
+    setResult(whoami);
+  };
 
   console.log(`[App] my_counter_app_backend:`, my_counter_app_backend);
 
@@ -21,7 +29,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const increment = async () => {
     if (loading) return; // Cancel if waiting for a new count
@@ -45,26 +53,39 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <main>
       <img src="/logo2.svg" alt="DFINITY logo" />
       <br />
       <br />
+      <button
+        type="button"
+        id="whoamiButton"
+        className="primary"
+        onClick={handleClick}
+      >
+        Who am I?
+      </button>
+      <br />
+      <br />
       Counter: {counter}
       <br />
       <br />
-      <button onClick={increment} style={{ opacity: loading ? 0.5 : 1 }} >Increment</button>
+      <button onClick={increment} style={{ opacity: loading ? 0.5 : 1 }}>
+        Increment
+      </button>
       <br />
       <br />
       <button>Decrement (Add your code)</button>
       <br />
       <br />
-      <button onClick={reset} style={{ opacity: loading ? 0.5 : 1 }} >Reset to zero</button>
+      <button onClick={reset} style={{ opacity: loading ? 0.5 : 1 }}>
+        Reset to zero
+      </button>
       <br />
       <br />
-
     </main>
   );
 }
